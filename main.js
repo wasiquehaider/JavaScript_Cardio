@@ -124,7 +124,7 @@ const ages = [33, 12, 20, 16, 5, 54, 21, 44, 61, 13, 15, 45, 25, 64, 32];
 
 // console.log(combined);
 
-// ==========JavaScript Cardio Session One=========
+// ==============================================JavaScript Cardio Session One==============================================
 
 function reverseString(str) {
   // =====first method=====
@@ -245,11 +245,212 @@ function fizzBuzz() {
   }
 }
 
-console.log(reverseString("hello"));
-console.log(palindrome("madam"));
-console.log(reverseInteger(12345));
-console.log(reverseInteger(-12345)); //Math.sign(string)
+// console.log(reverseString("hello"));
+// console.log(palindrome("madam"));
+// console.log(reverseInteger(12345));
+// console.log(reverseInteger(-12345)); //Math.sign(string)
 
-console.log(CapitalizeLetter("i code in javascript"));
-console.log(maxCharacter("javascript"));
-console.log(fizzBuzz());
+// console.log(CapitalizeLetter("i code in javascript"));
+// console.log(maxCharacter("javascript"));
+// console.log(fizzBuzz());
+
+// ==============================================JavaScript Cardio Session Two==============================================
+
+function longestWord(sentence) {
+  // create filtered array
+  const wordArr = sentence.toLowerCase().match(/[a-z0-9]+/g);
+  //sort by length
+  const sorted = wordArr.sort((a, b) => b.length - a.length);
+
+  // if multiple words then put into Array
+  const longestwordArr = sorted.filter(
+    word => word.length === sorted[0].length
+  );
+  // check if more than one array value
+  if (longestwordArr.length === 1) {
+    return longestwordArr[0];
+  } else {
+    return longestwordArr;
+  }
+}
+
+function chunkArray(arr, len) {
+  //  first solution
+
+  // // init chunked array
+  // const chunkedArr = [];
+  // // set index
+  // let i = 0;
+
+  // // loop while the length is less than the array length
+  // while (i < arr.length) {
+  //   // slice out from the index to the index + the chunk length and push on to the chunked array
+  //   chunkedArr.push(arr.slice(i, i + len));
+  //   //increment by the chunk lenght
+  //   i += len;
+  // }
+
+  // return chunkedArr;
+
+  // Second Solution
+
+  // Init chunked array
+  const chunkedArr = [];
+
+  // loop thorugh array
+  arr.forEach(val => {
+    // get last element
+    const last = chunkedArr[chunkedArr.length - 1];
+
+    // check if the last lenght is equal to the chunk length
+    if (!last || last.length === len) {
+      chunkedArr.push([val]);
+    } else {
+      last.push(val);
+    }
+  });
+  return chunkedArr;
+}
+
+function flattenArray(arrays) {
+  //Solution 1
+  // return arrays.reduce((a, b) => a.concat(b));
+  //Solution 2
+  // return [].concat.apply([], arrays);
+  //Solution 3
+  return [].concat(...arrays);
+}
+function isAnagram(str1, str2) {
+  return formatStr(str1) === formatStr(str2);
+}
+// helper function
+function formatStr(str) {
+  return str
+    .replace(/[^\w]/g, "")
+    .toLowerCase()
+    .split("")
+    .sort()
+    .join("");
+}
+
+function letterChanges(str) {
+  let newStr = str.toLowerCase().replace(/[a-z]/gi, char => {
+    if (char === "z" || char === "Z") {
+      return "a";
+    } else {
+      return String.fromCharCode(char.charCodeAt() + 1);
+    }
+  });
+
+  newStr = newStr.replace(/a|e|i|o|u/gi, vowel => vowel.toUpperCase());
+  return newStr;
+}
+
+// console.log(longestWord("Hello there , my name is wasique haider."));
+// console.log(chunkArray([1, 2, 3, 4, 5, 6, 7, 8, 9, 0], 4));
+// console.log(flattenArray([[1, 2], [3, 4], [5, 6], [7, 8], [9, 0]]));
+// console.log(isAnagram("Dormitory", "dirty room##"));
+// console.log(letterChanges("Hello Therez"));
+
+// ==============================================JavaScript Cardio Session Three==============================================
+
+// Solution - ES5 arguments & for loops
+
+// function addAll(){
+//   var args = Array.prototype.slice.call(arguments)
+//   var total = 0
+//   for( var i = 0; i< args.length; i++ ){
+//     total += args[i]
+//   }
+//   return total
+// }
+
+// Solution - ES6 ...res operator & reduce/ foreach
+
+function addAll(...numbers) {
+  // let total = 0;
+  // numbers.forEach(num => (total += num));
+  // return total;
+
+  // with reduce
+
+  return numbers.reduce((acc, cur) => acc + cur);
+}
+
+function sumAllPrimes(num) {
+  let total = 0;
+
+  function checkForPrime(i) {
+    for (let j = 2; j < i; j++) {
+      if (i % j === 0) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  for (let i = 2; i < num; i++) {
+    if (checkForPrime(i)) {
+      total += i;
+    }
+  }
+  return total;
+}
+
+// solution 1 with aguments , indexof, filter
+
+// function seekAndDestroy(arr) {
+//   const args = Array.from(arguments);
+//   function filterArr(arr) {
+//     // return true if it is not in teh array
+//     return args.indexOf(arr) === -1;
+//   }
+//   return arr.filter(filterArr);
+// }
+
+// Solution 2 res, filter and includes
+function seekAndDestroy(arr, ...rest) {
+  return arr.filter(val => !rest.includes(val));
+}
+
+function sortByHeight(a) {
+  const arr1 = [];
+  const arr2 = [];
+
+  a.forEach((val, i) => (val === -1 ? arr1.push(i) : arr2.push(val)));
+
+  const sortArray = arr2.sort((a, b) => a - b);
+  arr1.forEach((val, i) => sortArray.splice(arr1[i], 0, -1));
+  return sortArray;
+}
+
+function missigLetter(str) {
+  let compare = str.charCodeAt(0);
+  let missing;
+
+  str.split("").map((char, ind) => {
+    if (str.charCodeAt(ind) == compare) {
+      ++compare;
+    } else {
+      missing = String.fromCharCode(compare);
+    }
+  });
+
+  return missing;
+}
+function evenAndoddSum(arr) {
+  let evenSum = 0;
+  let oddSum = 0;
+
+  arr.forEach(num => (num % 2 === 0 ? (evenSum += num) : (oddSum += num)));
+
+  return [evenSum, oddSum];
+}
+
+// console.log(addAll(2, 4, 6, 5, 7));
+// console.log(sumAllPrimes(10));
+// console.log(seekAndDestroy([2, 3, 4, 6, 6, "hello"], 2, 6, "hello"));
+// const a = [-1, 150, 190, 170, -1, -1, 160, 180];
+// console.log(sortByHeight(a));
+// console.log(missigLetter("abce"));
+// console.log(evenAndoddSum([50, 60, 60, 45, 71]));
